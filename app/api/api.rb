@@ -1,5 +1,3 @@
-#require 'grape-swagger'
-
 module Api
   class Demo < Grape::API
 
@@ -12,30 +10,26 @@ module Api
     format 'json'
 
     error_formatter :json, ErrorFormatter
-    #error_formatter :json, lambda { |message, backtrace, options, env|"error: #{message} from #{backtrace}"}
-
-    before do
-      #error!("401 Unauthorized", 401) unless authenticated
-    end
 
     helpers do
-      def warden
-        env['warden']
+      
+      def authenticate!
+        error!('Unauthorized. Invalid or expired token.', 401) unless current_user
       end
-
-      def authenticated
-        return true if warden.authenticated?
-        params[:access_token] && @user = User.find_by_authentication_token(params[:access_token])
-      end
-
+  
       def current_user
-        warden.user || @user
-      end
+        # find token. Check if valid.
+        token = ApiKey.where(access_token: headers['Access-Token']).first
+        if token && !token.expired?
+          @current_user = User.find(token.user_id)
+        else
+          false
+        end
+      end   
     end
 
     mount V1::Root
-    
-    #add_swagger_documentation
+
     # Docs
     add_swagger_documentation  mount_path: "/api-docs",
                                api_version: "1.0.0",
@@ -51,6 +45,6 @@ module Api
                                hide_documentation_path: true,
                                hide_format: true,
                                include_base_url: true
-    
+
   end
 end

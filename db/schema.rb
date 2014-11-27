@@ -11,13 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141120022901) do
+ActiveRecord::Schema.define(version: 20141126102728) do
 
   create_table "acticles", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",       null: false
   end
+
+  create_table "api_keys", force: true do |t|
+    t.string   "access_token",                null: false
+    t.integer  "user_id",                     null: false
+    t.boolean  "active",       default: true, null: false
+    t.datetime "expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "api_keys", ["access_token"], name: "index_api_keys_on_access_token", unique: true, using: :btree
+  add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
