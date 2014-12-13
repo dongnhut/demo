@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141126102728) do
+ActiveRecord::Schema.define(version: 20141127024452) do
 
   create_table "acticles", force: true do |t|
     t.datetime "created_at"
@@ -32,22 +32,29 @@ ActiveRecord::Schema.define(version: 20141126102728) do
   add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                             default: "", null: false
+    t.string   "encrypted_password",                default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",                     default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "authentication_token"
+    t.string   "username"
+    t.string   "firstname"
+    t.string   "lastname"
+    t.string   "displayname"
+    t.string   "location"
+    t.float    "latitude",               limit: 24
+    t.float    "longitude",              limit: 24
+    t.string   "avatar"
+    t.datetime "birthday"
   end
 
-  add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 

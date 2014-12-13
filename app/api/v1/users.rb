@@ -11,9 +11,6 @@ module V1
       }
     }
     get '/'  do
-      #
-      #header
-      #current_user
       authenticate!
       User.all
     end
@@ -23,10 +20,12 @@ module V1
       nickname: "addUser",
     }
     params do
-      requires :body,
-      desc: "Created user"
+      requires :body,  desc: "Created user"
     end
-    post :create do
+    post '/create' do
+      #wrap_parameters format: [:json]
+      #return params[:body];
+      
     end
     #--------------------------------------------------------------------
     # put /edit
@@ -38,8 +37,8 @@ module V1
       desc: "Edit user"
     end
     put :edit do
-     #authenticate!
-     return params[:user];
+     authenticate!
+     return params[:body];
      
     end
     #---------------------------------------------------------------------
